@@ -16,7 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *totalLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipControl;
 
+- (IBAction)onBillEditingChanged:(id)sender;
 - (IBAction)onTap:(id)sender;
+
 - (void) updateValues;
 
 @end
@@ -56,6 +58,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)onBillEditingChanged:(id)sender {
+    NSLog(@"changed value");
+    [self updateValues];
+
+}
+
 - (IBAction)onTap:(id)sender {
     [self.view endEditing:YES];
     [self updateValues];
@@ -63,6 +71,7 @@
 
 - (void) updateValues {
     float billAmount = [self.billTextField.text floatValue];
+    //self.billTextField.text = [NSString stringWithFormat:@"$%.2f",billAmount];
     
     NSArray *tipValues = @[@(0.1),@(0.15),@(0.2)];
     float tipAmount = billAmount * [tipValues[self.tipControl.selectedSegmentIndex] floatValue];

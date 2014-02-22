@@ -11,6 +11,7 @@
 @interface SettingsViewController ()
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *defaultTip;
+@property (weak, nonatomic) IBOutlet UILabel *updateQuote;
 
 
 @end
@@ -42,7 +43,16 @@
     // be sure to update our view with the default value we've got saved.
     self.defaultTip.selectedSegmentIndex = defaultTipSelection;
     
+    
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    
+    // no update quote when we transition to this view.
+    self.updateQuote.text = @"";
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -61,6 +71,10 @@
     [defaults setInteger:defaultTipSelection forKey:@"tipSelection"];
     [defaults synchronize];
     NSLog(@"default tip selection saved");
+    
+    NSArray *updateQuotes = @[@"Better work hard for my tip", @"This should be okay", @"Always had a weakness for those serving me drinks!"];
+    // TODO: fix this warning
+    self.updateQuote.text = [NSString stringWithFormat:@"%C %@ %C",8220,updateQuotes[self.defaultTip.selectedSegmentIndex],8221];
     
 }
 

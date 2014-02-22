@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipControl;
+@property (weak, nonatomic) IBOutlet UILabel *friendlyQuote;
 
 - (IBAction)onBillEditingChanged:(id)sender;
 - (IBAction)onTap:(id)sender;
@@ -49,6 +50,10 @@
     int defaultTipSelection = [defaults floatForKey:@"tipSelection"];
     self.tipControl.selectedSegmentIndex = defaultTipSelection;
     
+    
+    // until we actually enter a bill, let's leave out the friendly quote.
+    self.friendlyQuote.text = @"Enter your bill and tip amounts above";
+    
     [self updateValues];
 }
 
@@ -66,12 +71,18 @@
 
 - (IBAction)onTap:(id)sender {
     [self.view endEditing:YES];
+    
+    // when the user is done editing, let's format the value to 2 decimal places
+    // for presentation
+    float billAmount = [self.billTextField.text floatValue];
+    self.billTextField.text = [NSString stringWithFormat:@"%.2f",billAmount];
+    
     [self updateValues];
 }
 
 - (void) updateValues {
     float billAmount = [self.billTextField.text floatValue];
-    //self.billTextField.text = [NSString stringWithFormat:@"$%.2f",billAmount];
+    
     
     NSArray *tipValues = @[@(0.1),@(0.15),@(0.2)];
     float tipAmount = billAmount * [tipValues[self.tipControl.selectedSegmentIndex] floatValue];
@@ -79,6 +90,13 @@
     
     self.tipLabel.text = [NSString stringWithFormat:@"$%0.2f",tipAmount];
     self.totalLabel.text = [NSString stringWithFormat:@"$%0.2f",totalAmount];
+    
+    if (totalAmount > 0.0) {
+        NSArray *topQuotes = @[@"Thank you. Good bye.", @"Thank you, have a good day!", @"What lovely service,\r      see you again soon!"];
+        self.friendlyQuote.text = [NSString stringWithFormat:@"%C %@ %C",8220,topQuotes[self.tipControl.selectedSegmentIndex],8221];
+        
+    }
+    
 }
 
 - (void) onSettingsButton {

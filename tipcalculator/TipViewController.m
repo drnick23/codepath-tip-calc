@@ -46,10 +46,7 @@
 
     
     // set our tip amount to our default settings
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    int defaultTipSelection = [defaults floatForKey:@"tipSelection"];
-    self.tipControl.selectedSegmentIndex = defaultTipSelection;
-    
+    [self setToTipDefaults];
     
     // until we actually enter a bill, let's leave out the friendly quote.
     self.friendlyQuote.text = @"Enter your bill and tip amounts above";
@@ -57,10 +54,39 @@
     [self updateValues];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    
+    // let's check that defaults are applied before we actually show the view again
+    // after coming back from settings view
+    [self setToTipDefaults];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"view did appear");
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    NSLog(@"view will disappear");
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    NSLog(@"view did disappear");
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setToTipDefaults {
+    // set our tip amount to our default settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int defaultTipSelection = [defaults floatForKey:@"tipSelection"];
+    self.tipControl.selectedSegmentIndex = defaultTipSelection;
+
 }
 
 - (IBAction)onBillEditingChanged:(id)sender {
@@ -93,6 +119,7 @@
     
     if (totalAmount > 0.0) {
         NSArray *topQuotes = @[@"Thank you. Good bye.", @"Thank you, have a good day!", @"What lovely service,\r      see you again soon!"];
+        // TODO: fix this warning
         self.friendlyQuote.text = [NSString stringWithFormat:@"%C %@ %C",8220,topQuotes[self.tipControl.selectedSegmentIndex],8221];
         
     }

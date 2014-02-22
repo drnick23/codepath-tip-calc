@@ -36,6 +36,7 @@
     int defaultTipSelection = [defaults floatForKey:@"tipSelection"];
     
     if (defaultTipSelection) {
+        // TODO: fix this warning somehow
         NSLog([NSString stringWithFormat:@"Default tip selection: %d",defaultTipSelection]);
     }
     // be sure to update our view with the default value we've got saved.
@@ -60,8 +61,6 @@
     [defaults setInteger:defaultTipSelection forKey:@"tipSelection"];
     [defaults synchronize];
     NSLog(@"default tip selection saved");
-    
-    // TODO: should we update tip selection in the view to reflect current default?
     
 }
 
